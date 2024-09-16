@@ -1,15 +1,23 @@
-const express = require('express');
+import express from "express";
 const app = express();
+import connectDb from "./config/db.js";
+import dotenv from "dotenv";
+dotenv.config();
 
-const env = require('dotenv');
+// importing routes
+import userRoutes from "./routes/userRoutes.js";
 
-env.config();
+// importing middlewares
+import errorHandler from "./middlewares/errorHandler.js";
 
-const PORT = process.env.PORT || 3007;
+// connects our app with mongodb database.
+connectDb();
 
-app.post('/check', (req, res) => {
-    res.json("Hello world");
-});
+// setting up routes
+app.use("/api", userRoutes);
 
+// use of error handler
+app.use(errorHandler);
 // SERVER IS RUNNING
+const PORT = process.env.PORT || 3007;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

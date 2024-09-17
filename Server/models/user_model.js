@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError.js";
+import { generateAuthToken } from "../utils/generateAuthToken.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -77,8 +78,9 @@ userSchema.pre("save", async function (next) {
   if (!user.isModified("password")) return;
 
   try {
-    const hash = await bcrypt.hash(user.password, process.env.SALT_ROUNDS);
-    user.password = hash;
+    const SALT_ROUND = parseInt(process.env.SALT_ROUNDS);
+    const hash = await bcrypt.hash(this.password, SALT_ROUND);
+    this.password = hash;
     next();
   } catch (error) {
     next(error);
@@ -86,27 +88,30 @@ userSchema.pre("save", async function (next) {
 });
 
 // check password for traditional login
-userSchema.static(
-  "matchPasswordAndGenerateToken",
-  async function (email, password) {
-    try {
-      const user = await User.findOne({ email });
-
-      if (!user) {
-        throw new ApiError(401, "user not found");
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        throw new ApiError(401, "Invalid credentials");
-      }
-      const accessToken = generateAuthToken(user);
-      return accessToken;
-    } catch (error) {
-      throw new ApiError(error);
+userSchema.statics.matchPasswordAndGenerateToken = async function (
+  email,
+  password
+) {
+  try {
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      throw new ApiError(401, "user not found");
     }
+    console.log(user);
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw new ApiError(401, "Invalid credentials");
+    }
+    const accessToken = await generateAuthToken(user);
+    console.log(accessToken);
+    return accessToken;
+  } catch (error) {
+    throw new ApiError(
+      error.statusCode || 500,
+      error.message || "internal server error"
+    );
   }
-);
+};
 
 const User = mongoose.model("User", userSchema);
 export default User;

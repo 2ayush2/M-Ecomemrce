@@ -2,7 +2,12 @@ import express from "express";
 const app = express();
 import connectDb from "./config/db.js";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 dotenv.config();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // importing routes
 import userRoutes from "./routes/userRoutes.js";

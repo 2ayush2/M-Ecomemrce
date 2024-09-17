@@ -1,4 +1,4 @@
-import JWT from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // Ensure you have jsonwebtoken installed
 
 const generateAuthToken = (user) => {
   const payload = {
@@ -6,27 +6,34 @@ const generateAuthToken = (user) => {
     email: user.email,
   };
 
-  // generating and signing a token
+  // Generate and sign a token
   const JWT_KEY = process.env.JWT_SECRET;
-  JWT.sign(
-    {
-      data: payload,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 10,
-    },
-    JWT_KEY,
-    (err, accessToken) => {
-      return accessToken;
-    }
-  );
+
+  // Use a Promise to handle async operation
+  return new Promise((resolve, reject) => {
+    jwt.sign(
+      payload,
+      JWT_KEY,
+      { expiresIn: "10d" }, // Expires in 10 days
+      (err, token) => {
+        if (err) {
+          return reject(err);
+        } else {
+          resolve(token);
+        }
+      }
+    );
+  });
 };
 
 const validateToken = (accessToken) => {
   const JWT_KEY = process.env.JWT_SECRET;
   JWT.verify(accessToken, JWT_KEY, (err, decoded) => {
     if (err) {
-      return err;    }
+      return err;
+    }
     return decoded;
   });
 };
 
-module.exports = { generateAuthToken, validateToken };
+export { generateAuthToken, validateToken };

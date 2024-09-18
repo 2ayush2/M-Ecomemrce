@@ -1,38 +1,41 @@
 import jwt from "jsonwebtoken"; // Ensure you have jsonwebtoken installed
+import ApiError from "./ApiError.js";
 
-const generateAuthToken = (user) => {
-  const payload = {
-    username: user.username,
-    email: user.email,
-  };
+const generateAuthToken = async (user) => {
+  try {
+    const payload = {
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
 
-  // Generate and sign a token
-  const JWT_KEY = process.env.JWT_SECRET;
+    const JWT_KEY = process.env.JWT_SECRET;
+    if (!JWT_KEY) throw new ApiError(500, "JWT_SECRET not defined");
 
-  // Use a Promise to handle async operation
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      payload,
-      JWT_KEY,
-      { expiresIn: "10d" }, // Expires in 10 days
-      (err, token) => {
-        if (err) {
-          return reject(err);
-        } else {
-          resolve(token);
-        }
-      }
-    );
-  });
+    const token = await new Promise((resolve, reject) => {
+      jwt.sign(payload, JWT_KEY, { expiresIn: "20m" }, (err, token) => {
+        if (err) reject(err);
+        resolve(token);
+      });
+    });
+
+    return token;
+  } catch (err) {
+    console.error("Token Generation Error: ", err);
+    throw err;
+  }
 };
 
 const validateToken = (accessToken) => {
   const JWT_KEY = process.env.JWT_SECRET;
-  JWT.verify(accessToken, JWT_KEY, (err, decoded) => {
-    if (err) {
-      return err;
-    }
-    return decoded;
+
+  return new Promise((resolve, reject) => {
+    jwt.verify(accessToken, JWT_KEY, (err, decoded) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(decoded);
+    });
   });
 };
 

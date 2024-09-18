@@ -1,6 +1,6 @@
 import mongoose from " mongoose";
 
-const productSchema = new Schema(
+const productSchema = new mongoose.Schema(
   {
     productName: {
       type: String,
@@ -29,8 +29,9 @@ const productSchema = new Schema(
 
     // clothing, electronics, fooding, etc.
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "Category",
     },
     brand: {
       type: String,

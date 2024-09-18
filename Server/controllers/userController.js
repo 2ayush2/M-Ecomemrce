@@ -57,4 +57,13 @@ const handleUserLogin = async (req, res, next) => {
   }
 };
 
+const handleUserLogout = async (req, res, next) => {
+  await res.clearCookie("accessToken", {
+    httpOnly: false, // temporarily
+    secure: false,
+  });
+  return res.json({ message: "done" });
+};
+
 export { handleUserRegistration, handleUserLogin };
+export default handleUserLogout;

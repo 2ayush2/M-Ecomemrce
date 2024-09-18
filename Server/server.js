@@ -1,9 +1,10 @@
 import express from "express";
 const app = express();
-import connectDb from "./config/db.js";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
 dotenv.config();
+import connectDb from "./config/db.js";
+import cookieParser from "cookie-parser";
+import { passport } from "./config/passport-setup.js";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -13,13 +14,17 @@ app.use(cookieParser());
 import userRoutes from "./routes/userRoutes.js";
 
 // importing middlewares
+import { Authentication } from "./middlewares/authorizeRoute.js";
 import errorHandler from "./middlewares/errorHandler.js";
 
 // connects our app with mongodb database.
 connectDb();
+app.use(passport.initialize());
 
+// using auth middlewares
+app.use(Authentication);
 // setting up routes
-app.use("/api", userRoutes);
+app.use("/auth", userRoutes);
 
 // use of error handler
 app.use(errorHandler);

@@ -1,2 +1,2 @@
-# M-Ecomemrce
-This is the complete ecommerce website
+# Project Setup
+### npm run dev

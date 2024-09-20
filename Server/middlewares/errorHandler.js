@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
   const isProduction = process.env.NODE_ENV === "production";
 
   if (err instanceof ApiError) {
-    return res.status(err.statusCode).json({
+    return res.status(err.statusCode || 500).json({
       success: err.success,
       message: err.message,
       errors: err.errors,

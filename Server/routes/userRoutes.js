@@ -5,15 +5,12 @@ import {
   handleUserRegistration,
   handleUserLogin,
 } from "../controllers/userController.js";
-
-import authorizeAdmin, { isProtected } from "../middlewares/authorizeRoute.js";
 import handleUserLogout from "../controllers/userController.js";
 
 // import passport from "passport";
 import { passport } from "../config/passport-setup.js";
 router.post("/register", handleUserRegistration);
 router.post("/login", handleUserLogin);
-
 router.get("/logout", handleUserLogout);
 
 // Routes for handling Google OAuth

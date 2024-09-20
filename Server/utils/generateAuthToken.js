@@ -4,6 +4,7 @@ import ApiError from "./ApiError.js";
 const generateAuthToken = async (user) => {
   try {
     const payload = {
+      id: user._id,
       username: user.username,
       email: user.email,
       role: user.role,

@@ -10,8 +10,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// importing routes
+// importing route controllers
 import userRoutes from "./routes/userRoutes.js";
+import profileRoute from "./routes/userProfileRoute.js";
+import categoryRoute from "./routes/categoryRoute.js";
+import productRoute from "./routes/productRoute.js";
 
 // importing middlewares
 import { Authentication } from "./middlewares/authorizeRoute.js";
@@ -25,6 +28,9 @@ app.use(passport.initialize());
 app.use(Authentication);
 // setting up routes
 app.use("/auth", userRoutes);
+app.use("/api/v1", profileRoute);
+app.use("/api/v1", categoryRoute);
+app.use("/api/v1", productRoute);
 
 // use of error handler
 app.use(errorHandler);

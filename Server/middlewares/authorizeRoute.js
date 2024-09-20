@@ -30,7 +30,6 @@ export async function Authentication(req, res, next) {
 export const isProtected = (requiredRoles) => (req, res, next) => {
   try {
     const { user } = req;
-    console.log("iam inside isProtected", user);
     if (!user || !requiredRoles.includes(user.role)) {
       //   next(new ApiError(403, "Access Denied"));
       return res.status(403).json({
@@ -40,17 +39,16 @@ export const isProtected = (requiredRoles) => (req, res, next) => {
     }
     next();
   } catch (error) {
-    // return next(new ApiError(error.statusCode, error.message));
-    return res.json({
-      message: error.statck,
-    });
+    return next(new ApiError(error.statusCode, error.message));
+    // return res.json({
+    //   message: error.statck,
+    // });
   }
 };
 
 // authorization for admin
 const authorizeAdmin = () => {
   return (req, res, next) => {
-    console.log("this is inside admnin auth middl", req.user);
     const { role } = req.user;
 
     if (role !== "admin") {
@@ -58,7 +56,6 @@ const authorizeAdmin = () => {
         messge: "access denied, forbidden",
       });
     }
-
     next();
   };
 };

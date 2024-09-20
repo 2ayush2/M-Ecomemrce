@@ -30,9 +30,6 @@ passport.use(
           return cb(null, currentUser);
         }
 
-        console.log(accessToken);
-        console.log(refreshToken);
-
         const user = {
           googleId: profile.id,
           username: profile.displayName,
@@ -46,7 +43,9 @@ passport.use(
           isVerified: true,
         });
 
-        const token = await generateAuthToken(user);
+        
+
+        const token = await generateAuthToken(newUser);
         done(null, { token, newUser });
       } catch (error) {
         done(err, false);

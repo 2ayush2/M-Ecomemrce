@@ -1,8 +1,8 @@
-import mongoose from " mongoose";
+import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    productName: {
+    name: {
       type: String,
       required: true,
       trim: true,
@@ -68,7 +68,7 @@ const productSchema = new mongoose.Schema(
 
     reviews: [
       {
-        user: { type: Schema.Types.ObjectId, ref: "User" },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         rating: { type: Number, required: true },
         comment: { type: String, required: true },
       },
@@ -78,4 +78,4 @@ const productSchema = new mongoose.Schema(
 );
 
 const Product = mongoose.model("Product", productSchema);
-module.exports = Product;
+export default Product;

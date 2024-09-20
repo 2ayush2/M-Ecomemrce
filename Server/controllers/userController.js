@@ -2,17 +2,21 @@ import User from "../models/user_model.js";
 import ApiError from "../utils/ApiError.js";
 
 const handleUserRegistration = async (req, res, next) => {
+  const { username, email, password, phone } = req.body;
+  const { address } = req.body;
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    return next(new ApiError(400, "user already exists"));
+  }
   try {
-    const { username, email, password, phone } = req.body;
-    const { address } = req.body;
-    const user = await new User({
+    const user = await User.create({
       username,
       email,
       password,
       phone,
       address,
     });
-    await user.save();
+
     return res.status(200).json({
       message: "user registered successfully",
       user,

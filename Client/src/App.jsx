@@ -1,12 +1,11 @@
-
-import './index.css'
+import Myroutes from './Router'
 
 function App() {
 
   return (
-   <div className='bg-red-400 text-4xl' >
-    welcome to club
-   </div>
+    <>
+    <Myroutes/>
+    </>
   )
 }
 

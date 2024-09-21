@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     },
 
     phone: {
-      type: Number,
+      type: String,
       required: true,
     },
 
@@ -60,9 +60,16 @@ const userSchema = new mongoose.Schema(
     },
 
     // user's orders history
-    orders: {
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+
+    userCart: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
+      ref: "Cart",
     },
   },
   { timestamps: true }

@@ -15,6 +15,7 @@ import userRoutes from "./routes/userRoutes.js";
 import profileRoute from "./routes/userProfileRoute.js";
 import categoryRoute from "./routes/categoryRoute.js";
 import productRoute from "./routes/productRoute.js";
+import cartRoute from "./routes/cartRoute.js";
 
 // importing middlewares
 import { Authentication } from "./middlewares/authorizeRoute.js";
@@ -31,6 +32,7 @@ app.use("/auth", userRoutes);
 app.use("/api/v1", profileRoute);
 app.use("/api/v1", categoryRoute);
 app.use("/api/v1", productRoute);
+app.use("/api/v1", cartRoute);
 
 // use of error handler
 app.use(errorHandler);

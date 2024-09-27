@@ -1,4 +1,3 @@
-import { decode } from "jsonwebtoken";
 import ApiError from "../utils/ApiError.js";
 import { validateToken } from "../utils/generateAuthToken.js";
 

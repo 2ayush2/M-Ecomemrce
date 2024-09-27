@@ -47,7 +47,7 @@ const handleUserLogin = async (req, res, next) => {
     );
 
     res.cookie("accessToken", accessToken, {
-      httpOnly: false, // temporarily
+      httpOnly: true, // temporarily
       secure: process.env.NODE_ENV === "development", //
     });
 

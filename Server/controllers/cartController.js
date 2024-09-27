@@ -114,4 +114,50 @@ const handleUpdateItemsInCart = asyncHandler(async (req, res, next) => {
   }
 });
 
-export { handleGetUserCartItem, handleAddItemsToCart, handleUpdateItemsInCart };
+const handleDeleteCartItems = asyncHandler(async (req, res, next) => {
+  const productId = req.params.productId;
+  if (!productId) return res.json({ message: "invalid product Id" });
+  const user = req.user;
+  if (!user)
+    return res.json({ message: "user not found, u need to log in first" });
+
+  try {
+    const usersCart = await Cart.findOne({ user: user.id });
+    if (!usersCart) {
+      return res.json({
+        message: "you need to place into cart first to delete",
+      });
+    }
+    const product = await product.findOne({ _id: productId });
+    if (!product)
+      return res.json({
+        message: "product not found",
+      });
+
+    const updatedCart = await Cart.findOneAndUpdate(
+      { user: user.id },
+      { $pull: { product: productId } },
+      { new: true }
+    );
+
+    return res.status(201).json({
+      status: "success",
+      message: "product deleted from the cart",
+      updatedCart,
+    });
+  } catch (error) {
+    return next(
+      new ApiError(
+        error.statusCode || 500,
+        error.message || "internal server error"
+      )
+    );
+  }
+});
+
+export {
+  handleGetUserCartItem,
+  handleAddItemsToCart,
+  handleUpdateItemsInCart,
+  handleDeleteCartItems,
+};

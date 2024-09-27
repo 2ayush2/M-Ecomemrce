@@ -7,8 +7,10 @@ import {
   handleGetUserCartItem,
   handleAddItemsToCart,
   handleUpdateItemsInCart,
+  handleDeleteCartItems,
 } from "../controllers/cartController.js";
 
+// route for add and get items in cart
 router
   .route("/cart")
   .get(isProtected(["customer", "admin"]), checkObjectId, handleGetUserCartItem)
@@ -18,6 +20,7 @@ router
     handleAddItemsToCart
   );
 
+// route for update and delete cart items
 router
   .route("/cart/:productId")
   .put(
@@ -25,6 +28,10 @@ router
     checkObjectId,
     handleUpdateItemsInCart
   )
-  .delete();
+  .delete(
+    isProtected(["customer", "admin"]),
+    checkObjectId,
+    handleDeleteCartItems
+  );
 
 export default router;

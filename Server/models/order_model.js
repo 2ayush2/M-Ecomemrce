@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaTypeOptions } from "mongoose";
 
 const orderSchema = new Schema(
   {
@@ -8,17 +8,13 @@ const orderSchema = new Schema(
       required: true,
     },
 
-    products: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        quantity: { type: Number, required: true, default: 1 },
-        price: { type: Number, required: true },
-      },
-    ],
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    quantity: { type: Number, required: true, default: 1 },
+    price: { type: Number, required: true },
 
     totalAmount: {
       type: Number,
@@ -49,7 +45,14 @@ const orderSchema = new Schema(
       enum: ["Processing", "Shipped", "Delivered", "Cancelled"],
       required: true,
     },
-
+    statusUpdates: [
+      {
+        status: {
+          type: String,
+          updatedAt: { type: Date, default: Date.now() },
+        },
+      },
+    ],
     deliveredAt: {
       type: Date,
     },

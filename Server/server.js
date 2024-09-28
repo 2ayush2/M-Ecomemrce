@@ -17,6 +17,7 @@ import categoryRoute from "./routes/categoryRoute.js";
 import productRoute from "./routes/productRoute.js";
 import cartRoute from "./routes/cartRoute.js";
 import reviewRoute from "./routes/reviewRoute.js";
+import orderRoute from "./routes/orderRoute.js";
 
 // importing middlewares
 import { Authentication } from "./middlewares/authorizeRoute.js";
@@ -35,6 +36,7 @@ app.use("/api/v1", categoryRoute);
 app.use("/api/v1", productRoute);
 app.use("/api/v1", cartRoute);
 app.use("/api/v1", reviewRoute);
+app.use("/api/v1", orderRoute);
 
 // use of error handler
 app.use(errorHandler);

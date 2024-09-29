@@ -1,6 +1,6 @@
-import mongoose, { SchemaTypeOptions } from "mongoose";
+import mongoose from "mongoose";
 
-const orderSchema = new Schema(
+const orderSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,7 +14,6 @@ const orderSchema = new Schema(
       required: true,
     },
     quantity: { type: Number, required: true, default: 1 },
-    price: { type: Number, required: true },
 
     totalAmount: {
       type: Number,
@@ -38,12 +37,12 @@ const orderSchema = new Schema(
     paymentStatus: {
       type: String,
       enum: ["Pending", "Paid", "Failed"],
-      required: true,
+      default: "Pending",
     },
     orderStatus: {
       type: String,
       enum: ["Processing", "Shipped", "Delivered", "Cancelled"],
-      required: true,
+      default: "Processing",
     },
     statusUpdates: [
       {
@@ -60,5 +59,5 @@ const orderSchema = new Schema(
   { timestamps: true }
 );
 
-const Order = mongoose.model("User", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 export default Order;

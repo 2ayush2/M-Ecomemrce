@@ -12,7 +12,11 @@ import {
 } from "../controllers/orderController.js";
 
 // create new order
-router.post("/order/place", isProtected("admin", "customer"), handlePlaceOrder);
+router.post(
+  "/order/place",
+  isProtected(["admin", "customer"]),
+  handlePlaceOrder
+);
 
 // review the created order
 router.get(
@@ -40,7 +44,7 @@ router.put(
 
 router.put(
   "/order/status/:orderId",
-  isProtected(["admin", "customer"]),
+  isProtected(["admin"]),
   checkObjectId,
   handleUpdateOrderStatus
 );
